@@ -1,0 +1,58 @@
+{
+	"id": "9becb829-8283-18f4-94c0-715d4ce2f44c",
+	"name": "Candy",
+	"description": "",
+	"order": [
+		"dd90af96-b368-b6fe-467f-36eaa7f11ea9",
+		"aaade0d4-c20c-e702-043e-063256a7e776"
+	],
+	"folders": [],
+	"timestamp": 1435710106213,
+	"owner": 0,
+	"remoteLink": "",
+	"public": false,
+	"createdAt": 1435710106213,
+	"updatedAt": 1435710215831,
+	"synced": false,
+	"requests": [
+		{
+			"id": "aaade0d4-c20c-e702-043e-063256a7e776",
+			"headers": "Content-Type: application/json\n",
+			"url": "http://localhost:8080/candy",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"version": 2,
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1435710972377,
+			"name": "POST Candy",
+			"description": "",
+			"collectionId": "9becb829-8283-18f4-94c0-715d4ce2f44c",
+			"synced": false,
+			"rawModeData": "{\"name\": \"thing\", \"size\": \"2oz\" }"
+		},
+		{
+			"id": "dd90af96-b368-b6fe-467f-36eaa7f11ea9",
+			"headers": "Content-Type: application/json\n",
+			"url": "http://localhost:8080/candy",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "GET",
+			"data": [],
+			"dataMode": "params",
+			"version": 2,
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1435710859284,
+			"name": "Get Candy",
+			"description": "",
+			"collectionId": "9becb829-8283-18f4-94c0-715d4ce2f44c",
+			"synced": false
+		}
+	]
+}
