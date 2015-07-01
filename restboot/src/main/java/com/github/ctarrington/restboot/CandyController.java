@@ -28,4 +28,10 @@ public class CandyController {
         Candy saved = repository.save(candy);
         return saved;
     }
+
+    @RequestMapping(method= RequestMethod.DELETE, value="{id}")
+    public void deleteCandy(@PathVariable String id) {
+        repository.delete(id);
+    }
+
 }

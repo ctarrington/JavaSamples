@@ -4,7 +4,8 @@
 	"description": "",
 	"order": [
 		"dd90af96-b368-b6fe-467f-36eaa7f11ea9",
-		"aaade0d4-c20c-e702-043e-063256a7e776"
+		"aaade0d4-c20c-e702-043e-063256a7e776",
+		"8e0f36e0-fb55-4b9e-f709-b0abef70b2ba"
 	],
 	"folders": [],
 	"timestamp": 1435710106213,
@@ -12,9 +13,28 @@
 	"remoteLink": "",
 	"public": false,
 	"createdAt": 1435710106213,
-	"updatedAt": 1435710215831,
+	"updatedAt": 1435715149382,
 	"synced": false,
 	"requests": [
+		{
+			"id": "8e0f36e0-fb55-4b9e-f709-b0abef70b2ba",
+			"headers": "Content-Type: application/json\n",
+			"url": "http://localhost:8080/candy/55933fe4d4c610b96d816448",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "DELETE",
+			"data": [],
+			"dataMode": "params",
+			"version": 2,
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1435715190542,
+			"name": "Delete Candy",
+			"description": "",
+			"collectionId": "9becb829-8283-18f4-94c0-715d4ce2f44c",
+			"synced": false
+		},
 		{
 			"id": "aaade0d4-c20c-e702-043e-063256a7e776",
 			"headers": "Content-Type: application/json\n",
@@ -28,7 +48,7 @@
 			"tests": "",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1435710972377,
+			"time": 1435714367429,
 			"name": "POST Candy",
 			"description": "",
 			"collectionId": "9becb829-8283-18f4-94c0-715d4ce2f44c",
@@ -48,7 +68,7 @@
 			"tests": "",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1435710859284,
+			"time": 1435714364301,
 			"name": "Get Candy",
 			"description": "",
 			"collectionId": "9becb829-8283-18f4-94c0-715d4ce2f44c",
