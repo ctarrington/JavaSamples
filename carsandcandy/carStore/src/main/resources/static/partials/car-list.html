@@ -1,27 +1,34 @@
 <div class="container-fluid">
 
-    <pre>{{ cars|json }} </pre>
     <div class="row">
-        <div class="col-md-2">
+        <div class="col-xs-6">
             <!--Sidebar content-->
 
             Search: <input ng-model="query">
+        </div>
+
+        <div class="col-xs-6">
             Sort by:
             <select ng-model="orderProp">
-                <option value="name">Alphabetical</option>
-                <option value="age">Newest</option>
+                <option value="make">Make</option>
+                <option value="model">Model</option>
             </select>
-
-        </div>
-        <div class="col-md-10">
-            <!--Body content-->
-
-            <ul class="cars">
-                <li ng-repeat="car in cars | filter:query | orderBy:orderProp" class="thumbnail">
-                    <a href="#/cars/{{car.id}}">{{car.make}} {{car.model}}</a>
-                </li>
-            </ul>
-
         </div>
     </div>
+
+    <div class="row" ng-repeat="car in cars | filter:query | orderBy:orderProp">
+        <div class="col-xs-2">{{car.make}}</div>
+        <div class="col-xs-2">{{car.model}}</div>
+        <div class="col-xs-2"><a href="#/cars/{{car.id}}">Edit</a></div>
+        <div class="col-xs-2"><a ng-click="deleteCar(car)">Delete</a></div>
+    </div>
+
+    <h2>Add a Car</h2>
+    <ng-form name="newCarForm">
+        <input name="make" type="text" ng-model="newCar.make" placeholder="Enter the make"/>
+        <input name="model" type="text" ng-model="newCar.model" placeholder="Enter the model"/>
+        <button ng-click="saveCar()">Save</button>
+    </ng-form>
+
+
 </div>

@@ -30,8 +30,8 @@ public class CarController {
         return car;
     }
 
-    @RequestMapping(method= RequestMethod.DELETE, value="{id}")
-    public Object deleteCar(@PathVariable String id) {
+    @RequestMapping(method= RequestMethod.DELETE)
+    public Object deleteCar(@RequestParam("id") String id) {
         repository.delete(id);
         return new EmptyJson();
     }

@@ -38,16 +38,44 @@ carControllers.controller('MainCtrl', ['$scope', '$http', '$location',
 carControllers.controller('CarListCtrl', ['$scope', '$resource', 'CarStorage',
     function ($scope, $resource, CarStorage) {
 
-        CarStorage.get({},
-            function success(response) {
-                $scope.cars = response;
-            },
-            function error(errorResponse) {
-                console.log("Error:" + JSON.stringify(errorResponse));
-            }
-        );
+        function loadCars() {
+            CarStorage.get({},
+                function success(response) {
+                    $scope.cars = response;
+                },
+                function error(errorResponse) {
+                    console.log("Error:" + JSON.stringify(errorResponse));
+                }
+            );
+        }
 
-        $scope.orderProp = 'age';
+        $scope.saveCar = function() {
+            CarStorage.save($scope.newCar, function success(response) {
+                    console.log( "save success response"+JSON.stringify(response) );
+                    $scope.newCar = null;
+                    loadCars();
+                },
+                function error(errorResponse) {
+                    alert("Error:" + JSON.stringify(errorResponse));
+                }
+            );
+        };
+
+        $scope.deleteCar = function(car) {
+            CarStorage.delete({id:car.id}, function success(response) {
+                    console.log( "delete success response"+JSON.stringify(response) );
+                    loadCars();
+                },
+                function error(errorResponse) {
+                    alert("Error:" + JSON.stringify(errorResponse));
+                }
+            );
+
+        }
+
+        loadCars();
+        $scope.orderProp = 'make';
+        $scope.newCar = null;
 
     }]);
 
