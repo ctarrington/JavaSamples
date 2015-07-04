@@ -4,6 +4,14 @@ App = Ember.Application.create({
     rootElement : "#candy-application-root"
 });
 
+App.Router.reopen({
+    location: 'none'
+});
+
+App.ApplicationAdapter = DS.RESTAdapter.extend({
+    host: 'http://localhost:8080'
+});
+
 var candyListRaw = '\
 {{#each candy in candyList}}\
 {{#unless candy.isDirty}}\
@@ -38,10 +46,6 @@ Ember.TEMPLATES["application"] = Ember.Handlebars.compile('<div class="container
 Ember.TEMPLATES["candyList"] = Ember.Handlebars.compile(candyListRaw);
 Ember.TEMPLATES["candy"] = Ember.Handlebars.compile(candyRaw);
 Ember.TEMPLATES["create"] = Ember.Handlebars.compile(createRaw);
-
-//App.ApplicationAdapter = DS.LSAdapter.extend({
-//    namespace: 'candystore-data'
-//});
 
 App.Candy = DS.Model.extend({
     name: DS.attr('string'),
