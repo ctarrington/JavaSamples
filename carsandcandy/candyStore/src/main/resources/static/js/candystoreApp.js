@@ -34,7 +34,7 @@ var createRaw = '\
 <button {{action "submit" this }} >Submit</button>\
 ';
 
-Ember.TEMPLATES["application"] = Ember.Handlebars.compile('<div class="container"><h2>Candy Store</h2>{{outlet}}</div>');
+Ember.TEMPLATES["application"] = Ember.Handlebars.compile('<div class="container"><h2>Ember Candy Store with Spring Boot REST API</h2>{{outlet}}</div>');
 Ember.TEMPLATES["candyList"] = Ember.Handlebars.compile(candyListRaw);
 Ember.TEMPLATES["candy"] = Ember.Handlebars.compile(candyRaw);
 Ember.TEMPLATES["create"] = Ember.Handlebars.compile(createRaw);
