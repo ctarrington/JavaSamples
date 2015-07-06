@@ -9,7 +9,7 @@ App.Router.reopen({
 });
 
 App.ApplicationAdapter = DS.RESTAdapter.extend({
-    host: 'http://localhost:8080'
+    host: 'http://candy.dev:8075'
 });
 
 var candyListRaw = '\

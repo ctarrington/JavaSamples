@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@CrossOrigin
+@CrossOrigin()
+//@CrossOrigin(origin = "http://cars.dev:8070")
 @RestController
 @RequestMapping(value="/candies")
 public class CandyController {
