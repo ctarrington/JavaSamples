@@ -23,6 +23,10 @@ carstoreApp.config(['$routeProvider',
                 templateUrl: 'partials/car-detail.html',
                 controller: 'CarDetailCtrl'
             }).
+            when('/candy', {
+                templateUrl: 'partials/candy-detail.html',
+                controller: 'CarListCtrl'
+            }).
             otherwise({
                 redirectTo: '/cars'
             });
@@ -32,6 +36,19 @@ var carControllers = angular.module('carControllers', []);
 
 carControllers.controller('MainCtrl', ['$scope', '$http', '$location',
     function ($scope, $http, $location) {
+
+        $scope.candyStoreInitialized = false;
+
+        $scope.isCandyTime = function() {
+            return ($location.url().indexOf('candy') >= 0);
+        };
+
+        $scope.$on('$locationChangeSuccess', function(evt, newUrl, oldUrl) {
+            if (!$scope.candyStoreInitialized && newUrl.indexOf('candy') >= 0) {
+                candyStore.initialize();
+                $scope.candyStoreInitialized = true;
+            }
+        });
 
     }]);
 

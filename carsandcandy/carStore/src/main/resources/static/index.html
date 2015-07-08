@@ -22,8 +22,10 @@
     <div ng-controller="MainCtrl">
         <div ng-view></div>
         <p/>
-        <div id="candy-application-root"></div>
+        <div ng-show="isCandyTime()" id="candy-application-root"></div>
 
+        <a ng-hide="isCandyTime()" href='#/candy'>See some candy!</a>
+        <a ng-show="isCandyTime()" href='#/cars'>Back to cars</a>
     </div>
 </div>
 

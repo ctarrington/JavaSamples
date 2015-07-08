@@ -4,6 +4,14 @@ App = Ember.Application.create({
     rootElement : "#candy-application-root"
 });
 
+App.deferReadiness();
+window.candyStore = {
+    initialize: function (opts) {
+        App.advanceReadiness();
+    }
+};
+
+
 App.Router.reopen({
     location: 'none'
 });
