@@ -27,6 +27,10 @@ carstoreApp.config(['$routeProvider',
                 templateUrl: 'partials/candy-detail.html',
                 controller: 'CarListCtrl'
             }).
+            when('/login', {
+                templateUrl: 'partials/login.html',
+                controller: 'LoginCtrl'
+            }).
             otherwise({
                 redirectTo: '/cars'
             });
@@ -99,4 +103,27 @@ carControllers.controller('CarListCtrl', ['$scope', '$resource', 'CarStorage',
 carControllers.controller('CarDetailCtrl', ['$scope', '$routeParams',
     function($scope, $routeParams) {
         $scope.carId = $routeParams.carId;
+    }]);
+
+carControllers.controller('LoginCtrl', ['$scope', '$http',
+    function($scope, $http) {
+        $scope.status = '';
+        $scope.login = {
+            username: null,
+            password: null
+        };
+
+        $scope.login = function() {
+            $http.post('/cars/login', {name: $scope.login.username, password: $scope.login.password}).
+                success(function(data, status, headers, config) {
+                    $scope.status = 'OK';
+                    candyStore.setAssertion(data.description);
+                }).
+                error(function(data, status, headers, config) {
+                    $scope.status = 'ERROR';
+                });
+
+            $scope.status = 'Pending';
+        };
+
     }]);

@@ -8,16 +8,38 @@ App.deferReadiness();
 window.candyStore = {
     initialize: function (opts) {
         App.advanceReadiness();
+    },
+    setAssertion: function(securityAssertion) {
+
+        $.ajax({
+            beforeSend: function(xhrObj){
+                xhrObj.setRequestHeader("Content-Type","application/json");
+                xhrObj.setRequestHeader("Accept","application/json");
+            },
+            type: "POST",
+            xhrFields: {withCredentials: true},
+            url: 'http://candy.dev:8075/candies/assertion',
+            data: JSON.stringify( {content: securityAssertion } ),
+            dataType: "json",
+            success: function(jsonResponse){
+
+            }
+        });
     }
 };
-
 
 App.Router.reopen({
     location: 'none'
 });
 
+
 App.ApplicationAdapter = DS.RESTAdapter.extend({
-    host: 'http://candy.dev:8075'
+    host: 'http://candy.dev:8075',
+    ajax: function(url, method, hash) {
+        hash.crossDomain = true;
+        hash.xhrFields = {withCredentials: true};
+        return this._super(url, method, hash);
+    }
 });
 
 var candyListRaw = '\

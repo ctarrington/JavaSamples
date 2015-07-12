@@ -8,10 +8,12 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @CrossOrigin()
-//@CrossOrigin(origin = "http://cars.dev:8070")
 @RestController
 @RequestMapping(value="/candies")
 public class CandyController {
@@ -19,10 +21,13 @@ public class CandyController {
     @Autowired
     private CandyRepository repository;
 
-    private static final List<Candy> candies = new ArrayList<>();
-
     @RequestMapping(method= RequestMethod.GET)
-    public Map<String, List<Candy> > getAllCandy() {
+    public Map<String, List<Candy> > getAllCandy(HttpServletRequest request) {
+
+        for (Cookie cookie : request.getCookies())
+        {
+            System.out.println(cookie.getName()+" "+cookie.getValue());
+        }
 
         List<Candy> candies = repository.findAll();
         Map<String, List<Candy> > candiesMap = new HashMap<>();
@@ -54,6 +59,12 @@ public class CandyController {
         Map<String,Candy> responseMap = new HashMap<>();
         responseMap.put("candy", candy);
         return responseMap;
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value="/assertion")
+    public Object assertion(@RequestBody @Valid final SimpleAssertion simpleAssertion, HttpServletResponse response) {
+        response.addCookie(new Cookie("assertion", simpleAssertion.getContent()));
+        return new EmptyJson();
     }
 
 }

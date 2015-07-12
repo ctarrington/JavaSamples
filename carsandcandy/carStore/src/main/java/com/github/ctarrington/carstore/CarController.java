@@ -8,6 +8,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @RestController
@@ -18,7 +21,9 @@ public class CarController {
     private CarRepository repository;
 
     @RequestMapping(method= RequestMethod.GET)
-    public List<Car> getAllCars() {
+    public List<Car> getAllCars(HttpServletRequest request) {
+
+        Cookie[] cookies = request.getCookies();
 
         List<Car> cars = repository.findAll();
         return cars;
@@ -40,6 +45,11 @@ public class CarController {
     public Car getCarByID(@PathVariable String id) {
         Car car = repository.findOne(id);
         return car;
+    }
+
+    @RequestMapping(method= RequestMethod.POST, value="/login")
+    public Permissions login(@RequestBody @Valid final User user, HttpServletResponse response) {
+        return new Permissions("CarStore vouches for "+user.getName());
     }
 
 }
