@@ -24,10 +24,7 @@ public class CandyController {
     @RequestMapping(method= RequestMethod.GET)
     public Map<String, List<Candy> > getAllCandy(HttpServletRequest request) {
 
-        for (Cookie cookie : request.getCookies())
-        {
-            System.out.println(cookie.getName()+" "+cookie.getValue());
-        }
+        Utils.showCookies(request);
 
         List<Candy> candies = repository.findAll();
         Map<String, List<Candy> > candiesMap = new HashMap<>();
