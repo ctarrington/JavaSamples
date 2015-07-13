@@ -105,9 +105,12 @@ carControllers.controller('CarDetailCtrl', ['$scope', '$routeParams',
         $scope.carId = $routeParams.carId;
     }]);
 
-carControllers.controller('LoginCtrl', ['$scope', '$http',
-    function($scope, $http) {
+carControllers.controller('LoginCtrl', ['$scope', '$http', '$timeout',
+    function($scope, $http, $timeout) {
         $scope.status = '';
+        $scope.assertionForCandy = '';
+        $scope.redirectUrl = 'http://cars.dev:8070/#/cars';
+
         $scope.login = {
             username: null,
             password: null
@@ -117,7 +120,12 @@ carControllers.controller('LoginCtrl', ['$scope', '$http',
             $http.post('/cars/login', {name: $scope.login.username, password: $scope.login.password}).
                 success(function(data, status, headers, config) {
                     $scope.status = 'OK';
-                    candyStore.setAssertion(data.description);
+                    $scope.assertionForCandy = data.description;
+
+                    $timeout(function() {
+                        var formElement = $('#sendAssertionForm');
+                        formElement.submit();
+                    }, 200);
                 }).
                 error(function(data, status, headers, config) {
                     $scope.status = 'ERROR';

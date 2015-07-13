@@ -58,10 +58,4 @@ public class CandyController {
         return responseMap;
     }
 
-    @RequestMapping(method = RequestMethod.POST, value="/assertion")
-    public Object assertion(@RequestBody @Valid final SimpleAssertion simpleAssertion, HttpServletResponse response) {
-        response.addCookie(new Cookie("assertion", simpleAssertion.getContent()));
-        return new EmptyJson();
-    }
-
 }
