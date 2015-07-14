@@ -23,7 +23,6 @@ public class CandyController {
 
     @RequestMapping(method= RequestMethod.GET)
     public Map<String, List<Candy> > getAllCandy(HttpServletRequest request) {
-
         Utils.showCookies(request);
 
         List<Candy> candies = repository.findAll();
@@ -34,7 +33,9 @@ public class CandyController {
     }
 
     @RequestMapping(method= RequestMethod.POST)
-    public Map<String,Candy> addCandy(@RequestBody @Valid final Map<String,Candy> candyMap) {
+    public Map<String,Candy> addCandy(@RequestBody @Valid final Map<String,Candy> candyMap, HttpServletRequest request) {
+        Utils.showCookies(request);
+
         Candy candy = candyMap.get("candy");
         Candy saved = repository.save(candy);
 
@@ -44,13 +45,17 @@ public class CandyController {
     }
 
     @RequestMapping(method= RequestMethod.DELETE, value="{id}")
-    public Object deleteCandy(@PathVariable String id) {
+    public Object deleteCandy(@PathVariable String id, HttpServletRequest request) {
+        Utils.showCookies(request);
+
         repository.delete(id);
         return new EmptyJson();
     }
 
     @RequestMapping(method= RequestMethod.GET, value="{id}")
-    public Map<String,Candy> getCandyByID(@PathVariable String id) {
+    public Map<String,Candy> getCandyByID(@PathVariable String id, HttpServletRequest request) {
+        Utils.showCookies(request);
+
         Candy candy = repository.findOne(id);
 
         Map<String,Candy> responseMap = new HashMap<>();

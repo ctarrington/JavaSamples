@@ -1,20 +1,5 @@
+<h2>Cars</h2>
 <div class="container-fluid">
-
-    <div class="row">
-        <div class="col-xs-6">
-            <!--Sidebar content-->
-
-            Search: <input ng-model="query">
-        </div>
-
-        <div class="col-xs-6">
-            Sort by:
-            <select ng-model="orderProp">
-                <option value="make">Make</option>
-                <option value="model">Model</option>
-            </select>
-        </div>
-    </div>
 
     <div class="row" ng-repeat="car in cars | filter:query | orderBy:orderProp">
         <div class="col-xs-2">{{car.make}}</div>
@@ -30,5 +15,8 @@
         <button ng-click="saveCar()">Save</button>
     </ng-form>
 
-
+    <div ng-hide="isCandyTime()">
+        <h2>Visit our partners</h2>
+        <a href='#/candy'>See some candy!</a>
+    </div>
 </div>

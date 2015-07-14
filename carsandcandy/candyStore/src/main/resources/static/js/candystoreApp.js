@@ -68,8 +68,8 @@ var candyRaw = '\
 ';
 
 var createRaw = '\
-{{input type="text" id="name" value=name placeholder="Enter the name" }}\
-{{input type="text" id="size" value=size placeholder="Enter the size" }}\
+{{input type="text" id="name" value=name placeholder="Enter the name" }}<p/>\
+{{input type="text" id="size" value=size placeholder="Enter the size" }}<p/>\
 <button {{action "submit" this }} >Submit</button>\
 ';
 

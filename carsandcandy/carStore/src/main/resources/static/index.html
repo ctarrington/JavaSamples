@@ -5,6 +5,7 @@
     <title>Car Store Angular App</title>
 
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/carstore.css">
 
     <script src="lib/angular.min.js" ></script>
     <script src="lib/angular-route.min.js" ></script>
@@ -21,16 +22,12 @@
 
     <div ng-controller="MainCtrl">
         <div ng-show="isLoggedIn()">Welcome {{user}}!</div>
-        <a href="#/login" ng-show="!isLoggedIn()">Login</a>
 
         <div ng-view></div>
-        <p/>
+
         <div ng-show="isCandyTime()" id="candy-application-root"></div>
 
-        <a ng-hide="isCandyTime()" href='#/candy'>See some candy!</a>
-        <a ng-show="isCandyTime()" href='#/cars'>Back to cars</a>
-
-        <form  id="sendAssertionForm" action="http://candy.dev:8075/assertions" method="post">
+        <form style="display:none;" id="sendAssertionForm" action="http://candy.dev:8075/assertions" method="post">
             <input type="text" name="content" value="{{assertionForCandy()}}"/></p>
             <input type="text" name="redirectUrl" value="{{redirectUrl()}}" />
             <input type="submit" value="Submit" />
