@@ -49,7 +49,25 @@ public class CarController {
 
     @RequestMapping(method= RequestMethod.POST, value="/login")
     public Permissions login(@RequestBody @Valid final User user, HttpServletResponse response) {
+        response.addCookie(new Cookie("carsUser", user.getName()));
         return new Permissions("CarStore vouches for "+user.getName());
+    }
+
+    @RequestMapping(method= RequestMethod.GET, value="/user")
+    public User getUser(HttpServletRequest request) {
+
+        String username = null;
+
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ( "carsUser".equals(cookie.getName()) ) {
+                    username = cookie.getValue();
+                }
+            }
+        }
+
+        return new User(username, "");
     }
 
 }

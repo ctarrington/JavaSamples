@@ -32,7 +32,7 @@ carstoreApp.config(['$routeProvider',
                 controller: 'LoginCtrl'
             }).
             otherwise({
-                redirectTo: '/cars'
+                redirectTo: '/login'
             });
     }]);
 
@@ -42,6 +42,25 @@ carControllers.controller('MainCtrl', ['$scope', '$http', '$location',
     function ($scope, $http, $location) {
 
         $scope.candyStoreInitialized = false;
+        $http.get('/cars/user').
+            success(function(data, status, headers, config) {
+                $scope.user = data.name;
+            }).
+            error(function(data, status, headers, config) {
+                $scope.user = null;
+            });
+        $scope.assertionForCandy = '';
+        $scope.redirectUrl = function() { return 'http://cars.dev:8070/#/cars'; };
+
+        $scope.myAssertionForCandy = null;
+        $scope.assertionForCandy = function(value) {
+            if (value) {
+                $scope.myAssertionForCandy = value;
+            }
+            else {
+                return $scope.myAssertionForCandy;
+            }
+        };
 
         $scope.isCandyTime = function() {
             return ($location.url().indexOf('candy') >= 0);
@@ -53,6 +72,10 @@ carControllers.controller('MainCtrl', ['$scope', '$http', '$location',
                 $scope.candyStoreInitialized = true;
             }
         });
+
+        $scope.isLoggedIn = function() {
+            return ( $scope.user != null );
+        };
 
     }]);
 
@@ -108,8 +131,6 @@ carControllers.controller('CarDetailCtrl', ['$scope', '$routeParams',
 carControllers.controller('LoginCtrl', ['$scope', '$http', '$timeout',
     function($scope, $http, $timeout) {
         $scope.status = '';
-        $scope.assertionForCandy = '';
-        $scope.redirectUrl = 'http://cars.dev:8070/#/cars';
 
         $scope.login = {
             username: null,
@@ -119,8 +140,7 @@ carControllers.controller('LoginCtrl', ['$scope', '$http', '$timeout',
         $scope.login = function() {
             $http.post('/cars/login', {name: $scope.login.username, password: $scope.login.password}).
                 success(function(data, status, headers, config) {
-                    $scope.status = 'OK';
-                    $scope.assertionForCandy = data.description;
+                    $scope.assertionForCandy(data.description);
 
                     $timeout(function() {
                         var formElement = $('#sendAssertionForm');
