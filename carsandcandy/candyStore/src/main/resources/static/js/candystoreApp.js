@@ -1,49 +1,26 @@
-App = Ember.Application.create({
-    LOG_TRANSITIONS: true,
-    LOG_TRANSITIONS_INTERNAL: true,
-    rootElement : "#candy-application-root"
-});
+function createApp() {
+    var App = Ember.Application.create({
+        LOG_TRANSITIONS: true,
+        LOG_TRANSITIONS_INTERNAL: true,
+        rootElement : "#candy-application-root"
+    });
 
-App.deferReadiness();
-window.candyStore = {
-    initialize: function (opts) {
-        App.advanceReadiness();
-    },
-    setAssertion: function(securityAssertion) {
-
-        $.ajax({
-            beforeSend: function(xhrObj){
-                xhrObj.setRequestHeader("Content-Type","application/json");
-                xhrObj.setRequestHeader("Accept","application/json");
-            },
-            type: "POST",
-            xhrFields: {withCredentials: true},
-            url: 'http://candy.dev:8075/candies/assertion',
-            data: JSON.stringify( {content: securityAssertion } ),
-            dataType: "json",
-            success: function(jsonResponse){
-
-            }
-        });
-    }
-};
-
-App.Router.reopen({
-    location: 'none'
-});
+    App.Router.reopen({
+        location: 'none'
+    });
 
 
-App.ApplicationAdapter = DS.RESTAdapter.extend({
-    host: 'http://candy.dev:8075',
-    ajax: function(url, method, hash) {
-        var theHash = hash || {};
-        theHash.crossDomain = true;
-        theHash.xhrFields = {withCredentials: true};
-        return this._super(url, method, theHash);
-    }
-});
+    App.ApplicationAdapter = DS.RESTAdapter.extend({
+        host: 'http://candy.dev:8075',
+        ajax: function(url, method, hash) {
+            var theHash = hash || {};
+            theHash.crossDomain = true;
+            theHash.xhrFields = {withCredentials: true};
+            return this._super(url, method, theHash);
+        }
+    });
 
-var candyListRaw = '\
+    var candyListRaw = '\
 {{#each candy in candyList}}\
 {{#unless candy.isDirty}}\
 <div class="row">\
@@ -61,66 +38,79 @@ var candyListRaw = '\
 ';
 
 
-var candyRaw = '\
+    var candyRaw = '\
 <div>{{name}}</div>\
 <div>{{size}}</div>\
 {{#link-to "candyList"}}List{{/link-to}}\
 ';
 
-var createRaw = '\
+    var createRaw = '\
 {{input type="text" id="name" value=name placeholder="Enter the name" }}<p/>\
 {{input type="text" id="size" value=size placeholder="Enter the size" }}<p/>\
 <button {{action "submit" this }} >Submit</button>\
 ';
 
-Ember.TEMPLATES["application"] = Ember.Handlebars.compile('<div class="container"><h2>Ember Candy Store with Spring Boot REST API</h2>{{outlet}}</div>');
-Ember.TEMPLATES["candyList"] = Ember.Handlebars.compile(candyListRaw);
-Ember.TEMPLATES["candy"] = Ember.Handlebars.compile(candyRaw);
-Ember.TEMPLATES["create"] = Ember.Handlebars.compile(createRaw);
+    Ember.TEMPLATES["application"] = Ember.Handlebars.compile('<div class="container"><h2>Ember Candy Store with Spring Boot REST API</h2>{{outlet}}</div>');
+    Ember.TEMPLATES["candyList"] = Ember.Handlebars.compile(candyListRaw);
+    Ember.TEMPLATES["candy"] = Ember.Handlebars.compile(candyRaw);
+    Ember.TEMPLATES["create"] = Ember.Handlebars.compile(createRaw);
 
-App.Candy = DS.Model.extend({
-    name: DS.attr('string'),
-    size: DS.attr('string')
-});
+    App.Candy = DS.Model.extend({
+        name: DS.attr('string'),
+        size: DS.attr('string')
+    });
 
-App.Router.map(function() {
-    this.resource('candyList');
-    this.resource('create', { path: 'candy/create' });
-    this.resource('candy', { path: 'candy/:candy_id'	});
-});
+    App.Router.map(function() {
+        this.resource('candyList');
+        this.resource('create', { path: 'candy/create' });
+        this.resource('candy', { path: 'candy/:candy_id'	});
+    });
 
-App.IndexRoute = Ember.Route.extend({
-    beforeModel: function() {
-        this.transitionTo('candyList');
-    }
-});
+    App.IndexRoute = Ember.Route.extend({
+        beforeModel: function() {
+            this.transitionTo('candyList');
+        }
+    });
 
-App.CandyListRoute = Ember.Route.extend({
-    model: function() {
-        var dbg = 1;
-        return {
-            candyList: this.store.find('candy')
-        };
+    App.CandyListRoute = Ember.Route.extend({
+        model: function() {
+            return {
+                candyList: this.store.find('candy')
+            };
+        },
+        actions: {
+            delete: function(candy) {
+                candy.destroyRecord();
+            }
+        }
+    });
+
+    App.CreateRoute = Ember.Route.extend({
+        model: function() {
+            return this.store.createRecord('candy');
+        }
+    });
+
+    App.CreateController = Ember.ObjectController.extend({
+        error: "",
+        actions: {
+            submit: function(candy) {
+                candy.save();
+                this.transitionToRoute('candyList');
+            }
+        }
+    });
+
+    return App;
+}
+
+
+window.candyStore = {
+    initialize: function (opts) {
+        var App = createApp();
+        window.candyStore.lastApp = App;
     },
-    actions: {
-        delete: function(candy) {
-            candy.destroyRecord();
-        }
+    destroy: function() {
+        window.candyStore.lastApp.destroy();
     }
-});
-
-App.CreateRoute = Ember.Route.extend({
-    model: function() {
-        return this.store.createRecord('candy');
-    }
-});
-
-App.CreateController = Ember.ObjectController.extend({
-    error: "",
-    actions: {
-        submit: function(candy) {
-            candy.save();
-            this.transitionToRoute('candyList');
-        }
-    }
-});
+};

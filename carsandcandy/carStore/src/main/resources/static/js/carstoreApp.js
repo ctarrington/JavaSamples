@@ -70,6 +70,9 @@ carControllers.controller('MainCtrl', ['$scope', '$http', '$location',
             if (!$scope.candyStoreInitialized && newUrl.indexOf('candy') >= 0) {
                 candyStore.initialize();
                 $scope.candyStoreInitialized = true;
+            } else if ($scope.candyStoreInitialized && newUrl.indexOf('candy') === -1) {
+                candyStore.destroy();
+                $scope.candyStoreInitialized = false;
             }
         });
 
