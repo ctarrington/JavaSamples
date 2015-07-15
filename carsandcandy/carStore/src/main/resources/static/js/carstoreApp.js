@@ -41,6 +41,13 @@ var carControllers = angular.module('carControllers', []);
 carControllers.controller('MainCtrl', ['$scope', '$http', '$location',
     function ($scope, $http, $location) {
 
+        var changeRoute = function(evt) {
+            $location.search('candyRoute', evt.detail.newRoute);
+            $scope.$apply();
+        };
+
+        document.getElementById("messageBus").addEventListener("csRouteChangeRequest", changeRoute, false);
+
         $scope.candyStoreInitialized = false;
         $http.get('/cars/user').
             success(function(data, status, headers, config) {
@@ -67,13 +74,27 @@ carControllers.controller('MainCtrl', ['$scope', '$http', '$location',
         };
 
         $scope.$on('$locationChangeSuccess', function(evt, newUrl, oldUrl) {
-            if (!$scope.candyStoreInitialized && newUrl.indexOf('candy') >= 0) {
-                candyStore.initialize();
-                $scope.candyStoreInitialized = true;
+            if (newUrl.indexOf('candy') >= 0) {
+                if (!$scope.candyStoreInitialized) {
+                    candyStore.initialize();
+                    $scope.candyStoreInitialized = true;
+                } else {
+                    var event = new CustomEvent("csLocationChanged", {
+                            detail: { oldUrl: oldUrl, newUrl: newUrl },
+                            bubbles: true,
+                            cancelable: true
+                        }
+                    );
+
+                    document.getElementById("messageBus").dispatchEvent(event);
+                }
+
             } else if ($scope.candyStoreInitialized && newUrl.indexOf('candy') === -1) {
                 candyStore.destroy();
                 $scope.candyStoreInitialized = false;
             }
+
+
         });
 
         $scope.isLoggedIn = function() {
