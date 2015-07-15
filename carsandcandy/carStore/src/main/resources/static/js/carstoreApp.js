@@ -74,27 +74,15 @@ carControllers.controller('MainCtrl', ['$scope', '$http', '$location',
         };
 
         $scope.$on('$locationChangeSuccess', function(evt, newUrl, oldUrl) {
-            if (newUrl.indexOf('candy') >= 0) {
-                if (!$scope.candyStoreInitialized) {
-                    candyStore.initialize();
-                    $scope.candyStoreInitialized = true;
-                } else {
-                    var event = new CustomEvent("csLocationChanged", {
-                            detail: { oldUrl: oldUrl, newUrl: newUrl },
-                            bubbles: true,
-                            cancelable: true
-                        }
-                    );
 
-                    document.getElementById("messageBus").dispatchEvent(event);
+            var event = new CustomEvent("csLocationChanged", {
+                    detail: { oldUrl: oldUrl, newUrl: newUrl },
+                    bubbles: true,
+                    cancelable: true
                 }
+            );
 
-            } else if ($scope.candyStoreInitialized && newUrl.indexOf('candy') === -1) {
-                candyStore.destroy();
-                $scope.candyStoreInitialized = false;
-            }
-
-
+            document.getElementById("messageBus").dispatchEvent(event);
         });
 
         $scope.isLoggedIn = function() {

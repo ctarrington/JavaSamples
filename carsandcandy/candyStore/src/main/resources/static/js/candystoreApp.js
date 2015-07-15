@@ -63,7 +63,7 @@ function createApp() {
 <button {{action "submit" this }} >Submit</button>\
 ';
 
-    Ember.TEMPLATES["application"] = Ember.Handlebars.compile('<div class="container"><h2>Ember Candy Store with Spring Boot REST API</h2>{{outlet}}</div>');
+    Ember.TEMPLATES["application"] = Ember.Handlebars.compile('<div class="container"><h2>US - Ember Candy Store</h2>{{outlet}}</div>');
     Ember.TEMPLATES["candyList"] = Ember.Handlebars.compile(candyListRaw);
     Ember.TEMPLATES["candy"] = Ember.Handlebars.compile(candyRaw);
     Ember.TEMPLATES["create"] = Ember.Handlebars.compile(createRaw);
@@ -83,6 +83,9 @@ function createApp() {
         init: function() {
 
             function transitionToNewRoute(evt) {
+
+                if (evt.detail.newUrl.indexOf('candy') == -1) { return; }
+
                 var candyRouteMatches = evt.detail.newUrl.match(/candyRoute=([a-zA-Z0-9%]*)/);
 
                 var route = 'candyList';
@@ -164,12 +167,20 @@ function createApp() {
 }
 
 
-window.candyStore = {
-    initialize: function (opts) {
-        var App = createApp();
-        window.candyStore.lastApp = App;
-    },
-    destroy: function() {
-        window.candyStore.lastApp.destroy();
+$(document).ready(function() {
+    function checkForEntryToCandyStore(evt) {
+        var oldUrl = evt.detail.oldUrl;
+        var newUrl = evt.detail.newUrl;
+
+        if (oldUrl.indexOf('candy') == -1 && newUrl.indexOf('candy') >= 0) {
+            var App = createApp();
+            checkForEntryToCandyStore.lastApp = App;
+        } else if (oldUrl.indexOf('candy') >= 0 && newUrl.indexOf('candy') == -1) {
+            checkForEntryToCandyStore.lastApp.destroy();
+        }
     }
-};
+
+    document.getElementById("messageBus").addEventListener("csLocationChanged", checkForEntryToCandyStore, false);
+});
+
+
