@@ -1,12 +1,12 @@
 JavaSamples
 ===========
 
-Java and Java EE
+Java and Java EE    
 
-Spring Boot
+Spring Boot    
 
-Java 8
+Java 8    
 
-Parallel Stuff
+Parallel Stuff    
 
-Maven vs Gradle
+Maven vs Gradle    
