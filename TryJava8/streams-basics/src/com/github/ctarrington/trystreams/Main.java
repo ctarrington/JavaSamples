@@ -12,7 +12,7 @@ public class Main {
 
     List<String> finalTokens =
         Stream.of(raw.split("\\W+"))
-            .map(String::toLowerCase)
+            .map(String::toUpperCase)
             .distinct()
             .sorted()
             .collect(Collectors.toList());
