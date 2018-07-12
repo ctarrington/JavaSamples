@@ -8,6 +8,7 @@ public class MyFrame extends JFrame {
     setSize(500, 250);
     setTitle("My Frame");
     add(new MyMessageComponent("Hello cruel world!"));
+    add(new MyDrawing());
     pack();
   }
 }

@@ -11,7 +11,13 @@ public class MyMessageComponent extends JComponent {
     this.message = message;
   }
 
+  @Override
   public void paintComponent(Graphics g) {
-    g.drawString(message, 50, 50);
+    g.drawString(this.message, 50, 50);
+  }
+
+  @Override
+  public Dimension getPreferredSize() {
+    return new Dimension(500, 250);
   }
 }
