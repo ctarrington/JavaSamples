@@ -18,7 +18,7 @@ public class PerfTest3FilterSortMap extends PerfTest{
     protected Object runStreams(int sampleSize, Object data) {
         List<Integer> numbers = (List<Integer>) data;
         return numbers
-                .stream()
+                .parallelStream()
                 .filter(number -> number % 2 == 0)
                 .sorted()
                 .map(number -> new Thing(number))
