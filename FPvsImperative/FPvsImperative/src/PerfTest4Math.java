@@ -2,13 +2,10 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 
-public class PerfTest4Math {
+public class PerfTest4Math extends PerfTest {
     private static final int WALK_LENGTH = 2000;
     private static final double WALK_STEP = 0.05;
 
-    public static void main(String[] args) {
-        new PerfTest4Math().runTests();
-    }
 
     private class Results {
         public double mean;
@@ -16,53 +13,13 @@ public class PerfTest4Math {
         public double[] sortedResults;
     }
 
-    private void runTests() {
-        long repeatCount = 5;
-
-        System.out.printf("create and describe normal distribution. all times in milliseconds\n");
-
-        System.out.printf("each value is the average of %d repetitions of the loops\n", repeatCount);
-        System.out.printf("%10s %10s %10s %10s %10s\n", "sample size", "imperative", "fp", "diff", "% diff");
-        for (int sampleSizePower : new int[] {3,4,5}) {
-            int sampleSize = (int) Math.pow(10, sampleSizePower);
-
-            long imperativeDelta = 0;
-            for (int sampleCtr = 0; sampleCtr < repeatCount; sampleCtr++) {
-                long start = System.currentTimeMillis();
-                Results results = imperativeBuildDistribution(sampleSize);
-                long delta = System.currentTimeMillis() - start;
-                imperativeDelta += delta;
-
-                //System.out.println("Imperative mean: " + results.mean);
-                //System.out.println("imperative std: " +results.std);
-                //System.out.println("Imperative IQR "+results.sortedResults[(int) (sampleSize*0.25)] + " to " +results.sortedResults[(int) (sampleSize*0.75)]);
-            }
-
-            long fpDelta = 0;
-            for (int sampleCtr = 0; sampleCtr < repeatCount; sampleCtr++) {
-                long start = System.currentTimeMillis();
-                Results results = fpBuildDistribution(sampleSize);
-                long delta = System.currentTimeMillis() - start;
-                fpDelta += delta;
-
-                //System.out.println("FP mean: " + results.mean);
-                //System.out.println("FP std: " +results.std);
-                //System.out.println("FP IQR "+results.sortedResults[(int) (sampleSize*0.25)] + " to " +results.sortedResults[(int) (sampleSize*0.75)]);
-            }
-
-            imperativeDelta = imperativeDelta / repeatCount;
-            fpDelta = fpDelta / repeatCount;
-
-            long change = imperativeDelta-fpDelta;
-            String msg = change<0?"slower":"faster";
-            msg = change==0?"wash":msg;
-            long abs = Math.abs(change);
-            long percent = Math.round(100.0*abs/imperativeDelta);
-            System.out.printf("%10d %10d %10d %10d %10d%% %s\n", sampleSize, imperativeDelta, fpDelta, abs, percent, msg);
-        }
+    @Override
+    protected Object createData(int listSize) {
+        return null;
     }
 
-    private Results imperativeBuildDistribution(int sampleSize) {
+    @Override
+    protected Results runTraditional(int sampleSize, Object ignored) {
         Results results = new Results();
         results.sortedResults = new double[sampleSize];
 
@@ -89,7 +46,8 @@ public class PerfTest4Math {
         return results;
     }
 
-    private Results fpBuildDistribution(int sampleSize) {
+    @Override
+    protected Results runStreams(int sampleSize, Object ignored) {
         Results results = new Results();
 
         DoubleStream sampleStream = DoubleStream.generate(() -> {
@@ -112,5 +70,32 @@ public class PerfTest4Math {
                 sum();
         results.std = Math.sqrt(sum_of_squared_deviation / (sampleSize-1));
         return results;
+    }
+
+    @Override
+    protected boolean sanityCheck(Object traditional, Object streams) {
+        Results traditionalResults = (Results) traditional;
+        Results streamsResults = (Results) streams;
+
+        if (traditionalResults.sortedResults.length != streamsResults.sortedResults.length) {
+            System.out.println("lengths differ: " + traditionalResults.sortedResults.length + " " + streamsResults.sortedResults.length);
+            return false;
+        }
+
+        if (traditionalResults.sortedResults.length > 100 && Math.abs(traditionalResults.mean - streamsResults.mean) > 0.25) {
+            System.out.println("means differ: " + traditionalResults.mean + " " + streamsResults.mean);
+            return false;
+        }
+
+        if (traditionalResults.sortedResults.length > 100 && Math.abs(traditionalResults.std - streamsResults.std) > 0.25) {
+            System.out.println("standard deviations differ: " + traditionalResults.std + " " + streamsResults.std);
+            return false;
+        }
+
+        return true;
+    }
+
+    public static void main(String[] args) {
+        new PerfTest4Math().runTests(1, 1000, 1, new int[] {1, 10, 100, 1000, 10000, 100000});
     }
 }
