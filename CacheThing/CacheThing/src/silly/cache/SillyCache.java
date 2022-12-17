@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class SillyCache {
-    private List<Double> aValues = new ArrayList<>();
+    private List<Pair<Double, Integer>> aValues = new ArrayList<>();
     private List<Double> bValues = new ArrayList<>();
     private List<Integer> indexes = new ArrayList<>();
 
@@ -18,16 +18,15 @@ public class SillyCache {
         for (int ctr = 0; ctr < size; ctr++) {
             double aValue =  Math.random() * 1000;
             double bValue = aValue * 10 + Math.random();
-            aValues.add(aValue);
+            aValues.add(Pair.of(aValue, ctr));
             bValues.add(bValue);
             indexes.add(ctr);
         }
     }
 
     public List<Integer> sorted() {
-        List<Integer> indexes = IntStream.range(0, aValues.size())
+        List<Integer> indexes = aValues.stream()
                 .parallel()
-                .mapToObj(index -> Pair.of(this.aValues.get(index), this.indexes.get(index)))
                 .sorted((pairA, pairB) -> Double.compare(pairA.getLeft(), pairB.getLeft()))
                 .skip(475)
                 .limit(50)

@@ -7,12 +7,21 @@ public class Main {
         System.out.println("Hello world!");
         SillyCache cache = new SillyCache(1000000);
 
-        for (int repCtr = 0; repCtr < 20; repCtr++) {
+        int REPS = 500;
+        long totalTime = 0;
+        long minTime = 100000;
+        long maxTime = 0;
+
+        for (int repCtr = 0; repCtr < REPS; repCtr++) {
             long start = System.currentTimeMillis();
             List<Integer> indexes = cache.sorted();
             long delta = System.currentTimeMillis() - start;
-            System.out.println("delta: " + delta + " millis");
+            minTime = Long.min(minTime, delta);
+            maxTime = Long.max(maxTime, delta);
+            totalTime += delta;
             //System.out.println("head:\n"+cache.show(indexes.subList(0, 8)));
         }
+
+        System.out.println("average: "+totalTime/REPS+", min: " +minTime+ ", max: " + maxTime);
     }
 }
