@@ -1,4 +1,10 @@
 ## Notes
+
+Just the raw sort of a million doubles
+216 with no parallelism
+41 ms with parallelism
+
+
 Moving the pair into a map costs maybe 15 ms
 
 
